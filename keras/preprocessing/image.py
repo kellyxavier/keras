@@ -4,11 +4,21 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
-from .. import backend
-from .. import utils
-from ..utils import generic_utils
+from keras import backend
+from keras import utils
+from keras.utils import generic_utils
 
 from keras_preprocessing import image
+
+from glob import glob
+from IPython.display import display
+import pandas as pd
+from matplotlib import pyplot as plt
+import numpy as np
+from PIL import Image
+
+
+
 
 random_rotation = image.random_rotation
 random_shift = image.random_shift
@@ -598,3 +608,19 @@ class ImageDataGenerator(image.ImageDataGenerator):
 array_to_img.__doc__ = image.array_to_img.__doc__
 img_to_array.__doc__ = image.img_to_array.__doc__
 save_img.__doc__ = image.save_img.__doc__
+
+# print(glob('/Users/kellyxavier/Desktop/dental_imgs/with_cavities/*.png'))
+# img_gen = ImageDataGenerator().flow_from_dataframe(pd.DataFrame({'filename': glob('/Users/kellyxavier/Desktop/dental_imgs/with_cavities/*.png')}), color_mode='grayscale', class_mode=None, target_size=(100, 100), batch_size=2, shuffle=False, save_to_dir='/Users/kellyxavier/Desktop/dental_imgs/with_cavities/augmented')
+img_gen = ImageDataGenerator().flow_from_dataframe(pd.DataFrame({'filename': glob('/Users/kellyxavier/Desktop/dental_imgs/test/*.png')}), color_mode='grayscale', class_mode=None, target_size=(100, 100), batch_size=3, shuffle=False, save_to_dir='/Users/kellyxavier/Desktop/dental_imgs/test/augmented')
+
+X = next(img_gen)
+for i in range(3):
+    fig, ax = plt.subplots(1, 2)
+    ax[0].imshow(X[i][..., 0], cmap='gray')
+    x = np.array(Image.open(img_gen.filepaths[i]))
+    ax[1].imshow(x, cmap='gray')
+    plt.show()
+
+# for p in glob('/Users/kellyxavier/Desktop/dental_imgs/test/augmented/*')[:3]:
+#     print('Filename: ' + p.split('/')[-1])
+#     display(Image.open(p))
