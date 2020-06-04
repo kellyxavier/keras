@@ -609,17 +609,22 @@ array_to_img.__doc__ = image.array_to_img.__doc__
 img_to_array.__doc__ = image.img_to_array.__doc__
 save_img.__doc__ = image.save_img.__doc__
 
-# print(glob('/Users/kellyxavier/Desktop/dental_imgs/with_cavities/*.png'))
-# img_gen = ImageDataGenerator().flow_from_dataframe(pd.DataFrame({'filename': glob('/Users/kellyxavier/Desktop/dental_imgs/with_cavities/*.png')}), color_mode='grayscale', class_mode=None, target_size=(100, 100), batch_size=2, shuffle=False, save_to_dir='/Users/kellyxavier/Desktop/dental_imgs/with_cavities/augmented')
-img_gen = ImageDataGenerator().flow_from_dataframe(pd.DataFrame({'filename': glob('/Users/kellyxavier/Desktop/dental_imgs/test/*.png')}), color_mode='grayscale', class_mode=None, target_size=(100, 100), batch_size=3, shuffle=False, save_to_dir='/Users/kellyxavier/Desktop/dental_imgs/test/augmented')
+img_folder = '/Users/kellyxavier/Desktop/DentalML/dental_imgs/test_without_cavities/'
+num_imgs = 4
+aug_img_folder = '/Users/kellyxavier/Desktop/DentalML/dental_imgs/test_without_cavities/aug'
+aug_size = (250, 250)
+img_gen = ImageDataGenerator().flow_from_dataframe(pd.DataFrame({'filename': glob(img_folder + '*.png')}), color_mode='grayscale', class_mode=None, target_size=aug_size, batch_size=num_imgs, shuffle=False, save_to_dir=aug_img_folder)
 
 X = next(img_gen)
-for i in range(3):
+for i in range(num_imgs):
     fig, ax = plt.subplots(1, 2)
     ax[0].imshow(X[i][..., 0], cmap='gray')
     x = np.array(Image.open(img_gen.filepaths[i]))
     ax[1].imshow(x, cmap='gray')
     plt.show()
+
+
+
 
 # for p in glob('/Users/kellyxavier/Desktop/dental_imgs/test/augmented/*')[:3]:
 #     print('Filename: ' + p.split('/')[-1])
